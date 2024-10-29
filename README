@@ -1,0 +1,4 @@
+Clone the Repo
+
+cd src
+cargo run

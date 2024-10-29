@@ -2,18 +2,13 @@ use ratatui::{
     layout::{Constraint, Direction, Layout},
     style::{Color, Style, Stylize},
     text::{Line, Span, Text},
-    widgets::{Block, Borders, Paragraph, Padding},
+    widgets::{Block, Borders, Paragraph, Padding, BorderType},
     Frame,
     symbols::border,
 };
 use crate::App;
 
 pub fn ui(frame: &mut Frame, app: &App) {
-
-    
-
-    
-    
     let title = Line::from(Span::styled(
         format!("Wish #{}", app.get_current_wishes()),
         Style::default()
@@ -32,7 +27,8 @@ pub fn ui(frame: &mut Frame, app: &App) {
         .border_set(border::THICK)
         .border_style(Style::default().fg(Color::White))
         .title_top(title)
-        .title_bottom(instructions);
+        .title_bottom(instructions)
+        .border_type(BorderType::Rounded);
 
     let outer_area = frame.area();
     let inner_area = container.inner(outer_area);
@@ -46,11 +42,19 @@ pub fn ui(frame: &mut Frame, app: &App) {
         ])
         .split(inner_area);
 
+    // HACK: This is a hack to center the ASCII art in the terminal.
+    let left;
+    if inner_area.width/2 > app.get_art_length() as u16/2 {
+        left = inner_area.width/2 - app.get_art_length() as u16/2;
+    } else {
+        left = app.get_art_length() as u16/2 - inner_area.width/2;
+    }
+
     let art_container = Block::default()
         .borders(Borders::BOTTOM)
         .border_style(Style::default().fg(Color::White))
         .title_style(Style::default().fg(Color::White).bg(Color::Black))
-        .padding(Padding {left: inner_area.width/2 - app.get_art_length() as u16/2, right: 0, top: 0, bottom: 0});
+        .padding(Padding {left: left, right: 0, top: 0, bottom: 0});
 
     let ascii_art = Paragraph::new(Text::raw(
         format!("

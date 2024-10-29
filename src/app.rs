@@ -81,7 +81,7 @@ impl App {
     fn handle_key_event(&mut self, key_event: KeyEvent) {
         match key_event.code {
             KeyCode::Char('q') => self.exit(),
-            KeyCode::Right => self.increment_current_dialog(),
+            KeyCode::Enter => self.increment_current_dialog(),
             _ => {}
         }
     }
